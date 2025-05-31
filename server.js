@@ -109,22 +109,25 @@ app.get("/deviceCategories", async (req, res) => {
 
 app.post("/recomended", async (req, res) => {
         const {list} = req.body
-        console.log(list)
-
         if(!list) return res.sendStatus(400)
 
-
         let reqList = []
-        list.array.forEach(async el => {
-            let p = await dbcontroller.getProductsFromCategory(list[0].typeName)
-            console.log(p)
+        for (let i = 0; i < list.length; i++) {
+
+        
+        // list.forEach(async el => {
+            let p = await dbcontroller.getProductsFromCategory(list[i].typeName)
+            // console.log(p)
 
             const mostEfficient = p.reduce((min, curr) =>
                 curr.PowerUsage < min.PowerUsage ? curr : min
             );
+            // console.log(mostEfficient);
+            
             reqList.push(mostEfficient)
-        });
-
+            // console.log(reqList)
+        };
+    
         console.log(reqList)
         res.json(reqList)
         
