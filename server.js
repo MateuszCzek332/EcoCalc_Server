@@ -4,6 +4,7 @@ const express = require('express')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const tokenController = require("./app/tokenController");
+const dbcontroller = require("./app/database")
 const app = express()
 const PORT = 3000;
 
@@ -19,16 +20,17 @@ app.post("/register",  (req, res) => {
     if(users.find( (user) => username == user.username ))
         return res.sendStatus(409)
 
-
     bcrypt.hash(password, 8,  async (err, hash) => {
         if (err)
             return res.sendStatus(400)
             
-
-        users.push({
+        let isAdded =  await dbcontroller.uddUser({
             username: username,
             password: hash
         })
+
+        if(!isAdded)
+            return res.sendStatus(409)
 
         return res.sendStatus(200)
     });
@@ -40,8 +42,8 @@ app.post("/login", async (req, res) => {
     if( !username || !password )
         return res.sendStatus(400)
 
-    const userInDB = users.find( (user) => username === user.username)
-    const compare = await bcrypt.compare(password, userInDB.password);
+    let odj =  await  dbcontroller.isUserValid({username: username})
+    const compare = await bcrypt.compare(password, odj.password);
     if(!compare)
         return res.sendStatus(401)
 
