@@ -42,13 +42,15 @@ app.post("/login", async (req, res) => {
     if( !username || !password )
         return res.sendStatus(400)
 
-    let odj =  await  dbcontroller.isUserValid({username: username})
-    const compare = await bcrypt.compare(password, odj.password);
+    let obj =  await  dbcontroller.isUserValid({username: username})
+    console.log(obj.Password, password);
+    
+    const compare = await bcrypt.compare(password, obj.Password);
     if(!compare)
         return res.sendStatus(401)
 
-    const accesToken = jwt.sign({username: userInDB.username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "30m"})
-    const refreshToken = jwt.sign({username: userInDB.username}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "1d"})
+    const accesToken = jwt.sign({username: username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "30m"})
+    const refreshToken = jwt.sign({username: username}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "1d"})
 
     return res.json({
         accesToken: accesToken,
