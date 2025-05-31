@@ -220,7 +220,7 @@ let DBfunc = {
                 }
 
                 let query = `SELECT Userid FROM HouseAppliances hp JOIN Users u ON hp.Userid = u.Userid WHERE u.Username = ?`;
-                conn.query(query, [User.username], (err, results) => {
+                conn.query(query, [User], (err, results) => {
                     conn.release();
 
                     if (err) {
@@ -265,7 +265,8 @@ let DBfunc = {
                 });
             })
         });
-    }
+    },
+    getUserApplianes
 }
 
 module.exports = DBfunc;
