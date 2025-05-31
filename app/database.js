@@ -192,6 +192,24 @@ let DBfunc = {
                 });
             });
         });
+    }, getProductsFromCategory: (category) => {
+        return new Promise((resolve, reject) => {
+            pool.getConnection((err, conn) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                let query = `SELECT * FROM ExampleProducts WHERE Typeid = ?`;
+                conn.query(query, [category], (err, results) => {
+                    conn.release();
+
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+        });
     }
 }
 
