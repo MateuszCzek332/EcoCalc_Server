@@ -24,7 +24,7 @@ conn.connect((err) => {
         DBfunc.isUserValid(new User("Testuser", "1234"), conn),
         DBfunc.isUserValid(new User("Testuser", "12345"), conn),
         DBfunc.isUserValid(new User("Testuser2", "4321"), conn),
-        DBfunc.uddUser(new User("sgvvvvfdjjfdgdggfg", "735gfgffg58"), conn)
+        //DBfunc.uddUser(new User("sgvvvvfdjjfdgdggfg", "735gfgffg58"), conn)
     ];
 
     Promise.all(queries)
