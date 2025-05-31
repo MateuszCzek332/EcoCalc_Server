@@ -23,7 +23,7 @@ let DBfunc = {
                 return reject(new Error("Username is empty!"));
             }
 
-            const conn = mysql.createConnection(args);
+            //const conn = mysql.createConnection(args);
             conn.connect((err) => {
                 if (err) {
                     conn.end();
@@ -49,18 +49,18 @@ let DBfunc = {
     },
     uddUser: (User) => {
         return new Promise((resolve, reject) => {
-            if (!User.username) {
-                return reject(new Error("Username is empty!"));
+            if (!User.username || !User.password) {
+                return reject(new Error("Username or password is empty!"));
             }
 
-            const conn = mysql.createConnection(args);
+            //const conn = mysql.createConnection(args);
             conn.connect((err) => {
                 if (err) {
                     conn.end();
                     return reject(err);
                 }
                 console.log("Successfully connected to database!");
-                DBfunc.usernameExists(User, conn).then(res => {                    
+                DBfunc.usernameExists(User, conn).then(res => {
                     if (res) return false;
 
                     let query = 'INSERT INTO Users (Username, Password) VALUES (?,?)';
@@ -91,9 +91,35 @@ let DBfunc = {
         });
     },
     saveSimpleCalc: (User, data, conn) => {
-        console.log(User, data)
-        // Save or override data of simple calc. 
-        // kazdy uzytkownik moze miec tylko jeden rekord
+        console.log(User, data.usage, data.price, data.size)
+        //const conn = mysql.createConnection(args);
+        conn.connect((err) => {
+            if (err) {
+                conn.end();
+                return reject(err);
+            }
+            console.log("Successfully connected to database!");
+            DBfunc.usernameExists(User, conn).then(res => {
+                if (res) return false;
+
+                let query = `INSERT INTO SimpleCalc 
+                            (\`Userid\`, \`Usage\`, \`Price\`, \`SolarSize\`)
+                            SELECT u.\`Userid\`, ?, ?, ?
+                            FROM Users u WHERE u.\`Username\` = ?;`;
+                let values = [data.usage, data.price, data.size, User];
+
+                conn.query(query, values, (err, results) => {
+                    conn.end();
+
+                    if (err) {
+                        return reject(err);
+                    }
+
+                    resolve(true);
+                });
+            });
+        })
+
     },
     getSimpleCalc: (User, conn) => {
         console.log(User)
