@@ -24,6 +24,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InViY
     "pricePerKWH": 24.5,
     "fotoSize": 55.1
 }
+###
+GET http://localhost:3000/simpleCalc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InViYmJiYnMxdnZ2djIzIiwiaWF0IjoxNzQ4NzE4NzM0LCJleHAiOjE3NDg3MjA1MzR9.VeM6HELarTpLO9mM-Yun2p9Fmcjyw4cwqViKGHgVkJc
 
 ###
 GET  http://localhost:3000/refresh

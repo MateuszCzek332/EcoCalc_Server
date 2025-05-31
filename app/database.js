@@ -132,18 +132,40 @@ let DBfunc = {
                     return reject(err);
                 }
 
-                let query = `SELECT * FROM SimpleCalc sc
+                let query = `SELECT sc.Usage, sc.Price, sc.SolarSize FROM SimpleCalc sc
                             JOIN Users u ON sc.Userid = u.Userid
                             WHERE u.Username = ?`;
 
-                conn.query(query, [User.username], (err, results) => {
+                conn.query(query, [User], (err, results) => {
                     conn.release();
 
                     if (err) {
                         return reject(err);
                     }
+                    console.log(results)
+                    resolve(results);
+                });
+            });
+        });
+    }, userHasSimple: (User) => {
+        return new Promise((resolve, reject) => {
+             pool.getConnection((err, conn) => {
+                if (err) {
+                    return reject(err);
+                }
 
-                    resolve(results.length > 0 ? results : null);
+                let query = `SELECT sc.Usage, sc.Price, sc.SolarSize FROM SimpleCalc sc
+                            JOIN Users u ON sc.Userid = u.Userid
+                            WHERE u.Username = ?`;
+
+                conn.query(query, [User], (err, results) => {
+                    conn.release();
+
+                    if (err) {
+                        return reject(err);
+                    }
+                    console.log(results)
+                    resolve(results);
                 });
             });
         });
