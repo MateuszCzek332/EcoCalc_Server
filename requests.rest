@@ -42,7 +42,8 @@ GET http://localhost:3000/deviceCategories
 
 
 ###
-GET http://localhost:3000/recomended 
+POST http://localhost:3000/recomended 
+Content-Type: application/json
 
 {
     "list": [
@@ -51,5 +52,5 @@ GET http://localhost:3000/recomended
             "usage": 2,
             "time": 10
         }
-    ],
+    ]
 }

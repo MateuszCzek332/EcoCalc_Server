@@ -107,13 +107,13 @@ app.get("/deviceCategories", async (req, res) => {
     return res.json(categories)
 })
 
-app.get("/recomended", async (req, res) => {
+app.post("/recomended", async (req, res) => {
         const {list} = req.body
         console.log(list)
 
         if(!list) return res.sendStatus(400)
 
-        let p = dbcontroller.getProductsFromCategory(list[0].typeName)
+        let p = await dbcontroller.getProductsFromCategory(list[0].typeName)
         console.log(p)
 
         const mostEfficient = p.reduce((min, curr) =>
