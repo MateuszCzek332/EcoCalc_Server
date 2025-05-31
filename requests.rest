@@ -42,6 +42,30 @@ GET http://localhost:3000/deviceCategories
 
 
 ###
+POST http://localhost:3000/advancedCalc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNzQ4NjkzNDc4LCJleHAiOjE3NDg3Nzk4Nzh9.k1Z2m3YgcLR-bEQzyZolwRNcNYhR60-8MERSRuHt-lw
+
+{
+    "list": [
+        {
+            "typeName":"Toaster",
+            "usage": 2,
+            "time": 10
+        },                
+        {
+            "typeName":"Iron",
+            "usage": 2,
+            "time": 10
+        },                
+        {
+            "typeName":"Blender",
+            "usage": 2,
+            "time": 10
+        }
+    ]
+}
+
 POST http://localhost:3000/recomended 
 Content-Type: application/json
 

@@ -130,6 +130,26 @@ app.post("/recomended", async (req, res) => {
         // }
 })
 
+app.post("/advancedCalc", async (req, res) => {
+    tokenController.verifyJWT(req, res)
+    if(!req.username) return res.end()
+
+    const {list} = req.body
+    if(!list) return res.sendStatus(400)
+
+    for (let i = 0; i < list.length; i++) {
+        let ans = await dbcontroller.saveUserAppliances(req.username, {
+            usage: list[i].usage, 
+            time: list[i].time, 
+            category: list[i].category
+        })
+
+        if(!ans) return res.sendStatus(400)
+    };
+
+})
+
+
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);
 });
