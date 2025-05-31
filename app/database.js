@@ -33,7 +33,7 @@ let DBfunc = {
 
                 const query = 'SELECT Password FROM Users WHERE Username = ?';
                 conn.query(query, [User.username], (err, results) => {
-                    conn.release(); 
+                    conn.release();
 
                     if (err) {
                         return reject(err);
@@ -172,6 +172,24 @@ let DBfunc = {
                 }
                 console.log(results.length > 0)
                 resolve(results.length > 0);
+            });
+        });
+    }, getCategories: () => {
+        return new Promise((resolve, reject) => {
+            pool.getConnection((err, conn) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                let query = `SELECT Name FROM ProductTypes`;
+                conn.query(query, (err, results) => {
+                    conn.release();
+
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
             });
         });
     }
