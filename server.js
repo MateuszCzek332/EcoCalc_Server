@@ -10,7 +10,7 @@ const PORT = 3000;
 
 app.use(express.json());
 
-let users = []
+let simpleCalc = []
 
 app.post("/register",  (req, res) => {
     const {username, password} = req.body
@@ -65,6 +65,31 @@ app.get("/refresh", async (req, res) => {
 
 app.post("/logout", async (req, res) => {
     tokenController.deleteJWT(req, res)
+})
+
+app.post("/simpleCalc", () => {
+    tokenController.verifyJWT(req, res)
+    if(!req.username) return res.end()
+
+    if(!req.body.usagePerMonth || !req.body.pricePerKWH || !req.body.fotoSize)
+        res.sendStatus(400)
+
+    dbcontroller.saveSimpleCalc(req.username, {
+        usagePerMonth: req.usagePerMonth,
+        pricePerKWH:req.pricePerKWH,
+        fotoSize:req.fotoSize
+    })
+})
+
+app.get("/simpleCalc", async () => {
+    tokenController.verifyJWT(req, res)
+    if(!req.username) return res.end()
+
+    let data = await dbcontroller.getSimpleCalc(req.username)
+    if(!data)
+        return res.sendStatus(404)
+
+    return res.json(data)
 })
 
 app.listen(PORT, () => {

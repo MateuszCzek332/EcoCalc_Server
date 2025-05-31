@@ -89,6 +89,15 @@ let DBfunc = {
                 resolve(results.length > 0)
             });
         });
+    },
+    saveSimpleCalc: (User, data, conn) => {
+        console.log(User, data)
+        // Save or override data of simple calc. 
+        // kazdy uzytkownik moze miec tylko jeden rekord
+    },
+    getSimpleCalc: (User, conn) => {
+        console.log(User)
+        // Get simple calc data of user or  null if user dont exist 
     }
 }
 
