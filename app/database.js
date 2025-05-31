@@ -212,7 +212,7 @@ let DBfunc = {
             });
         });
     },
-    userHasAppliances: (User, conn) => {
+    userHasAppliances: (User) => {
         return new Promise((resolve, reject) => {
             pool.getConnection((err, conn) => {
                 if (err) {
@@ -266,7 +266,29 @@ let DBfunc = {
             })
         });
     },
-    getUserApplianes
+    getUserAppliances: (User) => {
+                return new Promise((resolve, reject) => {
+            pool.getConnection((err, conn) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                let query = `SELECT hp.PowerUsage, hp.Time, pt.Name
+                            FROM HouseAppliances hp
+                            JOIN Users u ON hp.Userid = u.Userid
+                            JOIN ProductTypes pt ON hp.Typeid = pt.Typeid
+                            WHERE u.Username = ?;`;
+                conn.query(query, [User], (err, results) => {
+                    conn.release();
+
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(true);
+                });
+            });
+        });
+    }
 }
 
 module.exports = DBfunc;
