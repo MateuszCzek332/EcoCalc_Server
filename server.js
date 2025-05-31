@@ -98,6 +98,15 @@ app.get("/simpleCalc", async (req, res) => {
     return res.json(data)
 })
 
+app.get("/deviceCategories", async (req, res) => {
+
+    let categories = await dbcontroller.getCategories()
+    if(!categories)
+        return res.sendStatus(404)
+
+    return res.json(categories)
+})
+
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);
 });

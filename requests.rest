@@ -36,3 +36,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZ
 ###
 POST http://localhost:3000/logout 
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNzQ4NjkzNDc4LCJleHAiOjE3NDg3Nzk4Nzh9.k1Z2m3YgcLR-bEQzyZolwRNcNYhR60-8MERSRuHt-lw
+
+GET http://localhost:3000/deviceCategories 
+
