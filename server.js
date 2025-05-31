@@ -107,6 +107,21 @@ app.get("/deviceCategories", async (req, res) => {
     return res.json(categories)
 })
 
+app.get("/recomended", async (req, res) => {
+        const list = req.body.list
+        console.log(list)
+        if(!list) return res.sendStatus(400)
+            
+        let p = dbcontroller.getProductsFromCategory(list[0].typeName)
+        console.log(p)
+        
+        // {
+        //     typeName:
+        //     usage:
+        //     time:
+        // }
+})
+
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);
 });
