@@ -113,20 +113,26 @@ app.post("/recomended", async (req, res) => {
 
         if(!list) return res.sendStatus(400)
 
-        let p = await dbcontroller.getProductsFromCategory(list[0].typeName)
-        console.log(p)
 
-        const mostEfficient = p.reduce((min, curr) =>
-            curr.PowerUsage < min.PowerUsage ? curr : min
-        );
+        let reqList = []
+        list.array.forEach(async el => {
+            let p = await dbcontroller.getProductsFromCategory(list[0].typeName)
+            console.log(p)
 
-        res.json({item1: mostEfficient})
+            const mostEfficient = p.reduce((min, curr) =>
+                curr.PowerUsage < min.PowerUsage ? curr : min
+            );
+            reqList.push(mostEfficient)
+        });
+
+        console.log(reqList)
+        res.json(reqList)
         
         // {
         //     typeName:
         //     usage:
         //     time:
-        // }s
+        // }
 })
 
 app.listen(PORT, () => {

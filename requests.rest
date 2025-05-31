@@ -51,6 +51,16 @@ Content-Type: application/json
             "typeName":"Toaster",
             "usage": 2,
             "time": 10
+        },                
+        {
+            "typeName":"Iron",
+            "usage": 2,
+            "time": 10
+        },                
+        {
+            "typeName":"Blender",
+            "usage": 2,
+            "time": 10
         }
     ]
 }
