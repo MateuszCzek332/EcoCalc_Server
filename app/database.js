@@ -49,7 +49,7 @@ let DBfunc = {
     },
     uddUser: (User) => {
         return new Promise((resolve, reject) => {
-            DBfunc.isUserValid(User, conn).then(res => {
+            DBfunc.usernameExists(User).then(res => {
                 if (res) reject(new Error("User already exists!"))
                 let query = 'INSERT INTO Users (Username, Password) VALUES (?,?)';
                 let values = [User.username, User.password];
@@ -60,8 +60,16 @@ let DBfunc = {
             });
         });
     },
-    usernameExists: (User, conn) => {
-
+    usernameExists: (User) => {
+return new Promise((resolve, reject) => {
+            if (!User.username || !User.password) reject(new Error("Username or password is empty!"));
+            let query = 'SELECT * FROM Users WHERE Username LIKE ?';
+            let values = [User.username]
+            conn.query(query, values, (err, results) => {
+                if (err) reject(err);
+                resolve(results.length > 0)
+            });
+        });
     }
 }
 
