@@ -43,6 +43,7 @@ GET http://localhost:3000/deviceCategories
 
 ###
 GET http://localhost:3000/recomended 
+
 {
     "list": [
         {
