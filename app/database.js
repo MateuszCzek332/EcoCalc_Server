@@ -251,7 +251,7 @@ let DBfunc = {
                                 FROM Users u
                                 JOIN ProductTypes pt ON pt.Name = ?
                                 WHERE u.Username = ?`;
-                    let values = [data.usagePerMonth, data.time, data.category, User];
+                    let values = [data.usage, data.time, data.category, User];
 
                     conn.query(query, values, (err, results) => {
                         conn.release();
