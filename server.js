@@ -87,7 +87,7 @@ app.post("/simpleCalc", (req, res) => {
     return res.sendStatus(200);
 })
 
-app.get("/simpleCalc", async () => {
+app.get("/simpleCalc", async (req, res) => {
     tokenController.verifyJWT(req, res)
     if(!req.username) return res.end()
 
