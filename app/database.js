@@ -199,7 +199,7 @@ let DBfunc = {
                     return reject(err);
                 }
 
-                let query = `SELECT * FROM ExampleProducts WHERE Typeid = ?`;
+                let query = `SELECT * FROM ExampleProducts ep JOIN ProductTypes pt ON ep.Typeid = pt.Typeid WHERE pt.Name = ?`;
                 conn.query(query, [category], (err, results) => {
                     conn.release();
 
