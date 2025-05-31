@@ -17,11 +17,11 @@ Content-Type: application/json
 ###
 POST http://localhost:3000/simpleCalc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InViYmJiYnMxdnZ2djIzIiwiaWF0IjoxNzQ4NzE2ODU3LCJleHAiOjE3NDg3MTg2NTd9.-R4nVLvbahLOo-0lycH7LCgxclurO13ltg5dgrxbVHI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InViYmJiYnMxdnZ2djIzIiwiaWF0IjoxNzQ4NzE4NzM0LCJleHAiOjE3NDg3MjA1MzR9.VeM6HELarTpLO9mM-Yun2p9Fmcjyw4cwqViKGHgVkJc
 
 {
     "usagePerMonth": 10.3,
-    "pricePerKWH": 24.5,
+    "pricePerKWH": 244444.5,
     "fotoSize": 55.1
 }
 ###

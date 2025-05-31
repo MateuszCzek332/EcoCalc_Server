@@ -33,7 +33,7 @@ let DBfunc = {
 
                 const query = 'SELECT Password FROM Users WHERE Username = ?';
                 conn.query(query, [User.username], (err, results) => {
-                    conn.release(); // Release the connection back to the pool
+                    conn.release(); 
 
                     if (err) {
                         return reject(err);
@@ -99,30 +99,42 @@ let DBfunc = {
         });
     },
     saveSimpleCalc: (User, data) => {
-        console.log(User, data);
-
         return new Promise((resolve, reject) => {
             pool.getConnection((err, conn) => {
                 if (err) {
                     return reject(err);
                 }
 
-                let query = `INSERT INTO SimpleCalc 
-                            (\`Userid\`, \`Usage\`, \`Price\`, \`SolarSize\`)
-                            SELECT u.\`Userid\`, ?, ?, ?
-                            FROM Users u WHERE u.\`Username\` = ?;`;
-                let values = [data.usagePerMonth, data.pricePerKWH, data.fotoSize, User];
-
-                conn.query(query, values, (err, results) => {
-                    conn.release();
-
-                    if (err) {
-                        return reject(err);
+                DBfunc.userHasSimple(User, conn).then(res => {
+                    let query;
+                    if (res) {
+                        query = `UPDATE SimpleCalc sc
+                                JOIN Users u ON sc.\`Userid\` = u.\`Userid\`
+                                SET sc.\`Usage\` = ?, 
+                                sc.\`Price\` = ?, 
+                                sc.\`SolarSize\` = ?
+                                WHERE u.\`Username\` = ?;`
+                    } else {
+                        query = `INSERT INTO SimpleCalc 
+                                (\`Userid\`, \`Usage\`, \`Price\`, \`SolarSize\`)
+                                SELECT u.\`Userid\`, ?, ?, ?
+                                FROM Users u WHERE u.\`Username\` = ?;`;
                     }
 
-                    resolve(true);
+                    let values = [data.usagePerMonth, data.pricePerKWH, data.fotoSize, User];
+
+                    conn.query(query, values, (err, results) => {
+                        conn.release();
+
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        resolve(true);
+                    });
                 });
-            });
+            })
+
         });
     },
     getSimpleCalc: (User) => {
@@ -142,31 +154,24 @@ let DBfunc = {
                     if (err) {
                         return reject(err);
                     }
-                    console.log(results)
                     resolve(results);
                 });
             });
         });
-    }, userHasSimple: (User) => {
+    }, userHasSimple: (User, conn) => {
         return new Promise((resolve, reject) => {
-             pool.getConnection((err, conn) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                let query = `SELECT sc.Usage, sc.Price, sc.SolarSize FROM SimpleCalc sc
+            let query = `SELECT * FROM SimpleCalc sc
                             JOIN Users u ON sc.Userid = u.Userid
                             WHERE u.Username = ?`;
 
-                conn.query(query, [User], (err, results) => {
-                    conn.release();
+            conn.query(query, [User], (err, results) => {
+                conn.release();
 
-                    if (err) {
-                        return reject(err);
-                    }
-                    console.log(results)
-                    resolve(results);
-                });
+                if (err) {
+                    return reject(err);
+                }
+                console.log(results.length > 0)
+                resolve(results.length > 0);
             });
         });
     }
