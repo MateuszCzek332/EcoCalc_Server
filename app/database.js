@@ -21,13 +21,13 @@ conn.connect((err) => {
     console.log("Succesfully connected to the database!");
 
 
-    userExists(new User("Testuser", "1234"), conn)
+    DBfunc.userExists(new User("Testuser", "1234"), conn)
         .then(exists => console.log(exists))
         .catch(err => console.error(err));
-    userExists(new User("Testuser", "12345"), conn)
+    DBfunc.userExists(new User("Testuser", "12345"), conn)
         .then(exists => console.log(exists))
         .catch(err => console.error(err));
-    userExists(new User("Testuser2", "4321"), conn)
+    DBfunc.userExists(new User("Testuser2", "4321"), conn)
         .then(exists => console.log(exists))
         .catch(err => console.error(err));
 
@@ -44,7 +44,8 @@ function uddUser(User, conn) {
     });
 }
 
-function userExists(User, conn) {
+
+let DBfunc = {userExists: (User, conn) => {
     return new Promise((resolve, reject) => {
         if (!User.username || !User.password) reject(new Error("Username or password is empty!"));
         let query = 'SELECT * FROM Users WHERE Username LIKE ? AND Password LIKE ?';
@@ -54,4 +55,6 @@ function userExists(User, conn) {
             resolve(results.length > 0)
         });    
     });
-}
+}}
+
+module.exports = DBfunc;
