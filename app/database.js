@@ -20,20 +20,19 @@ conn.connect((err) => {
     if (err) throw err;
     console.log("Succesfully connected to the database!");
 
+    const queries = [
+        DBfunc.userExists(new User("Testuser", "1234"), conn),
+        DBfunc.userExists(new User("Testuser", "12345"), conn),
+        DBfunc.userExists(new User("Testuser2", "4321"), conn),
+        DBfunc.uddUser(new User("sgvvvvfddgdggfg", "735gfgffg58"), conn)
+    ];
 
-    DBfunc.userExists(new User("Testuser", "1234"), conn)
-        .then(exists => console.log(exists))
-        .catch(err => console.error(err));
-    DBfunc.userExists(new User("Testuser", "12345"), conn)
-        .then(exists => console.log(exists))
-        .catch(err => console.error(err));
-    DBfunc.userExists(new User("Testuser2", "4321"), conn)
-        .then(exists => console.log(exists))
-        .catch(err => console.error(err));
-    DBfunc.uddUser(new User("sgfgfg", "73558"), conn)
-
-
-    conn.end();
+    Promise.all(queries)
+        .then(results => {
+            results.forEach(res => console.log(res));
+        })
+        .catch(err => console.error(err))
+        .finally(() => conn.end());
 });
 
 let DBfunc = {
@@ -49,12 +48,16 @@ let DBfunc = {
         });
     },
     uddUser: (User, conn) => {
-        if (!User.username || !User.password) throw new Error("Username or password is empty!");
-        let query = 'INSERT INTO Users (Username, Password) VALUES (?,?)';
-        let values = [User.username, User.password];
-        conn.query(query, values, (err, results) => {
-            if (err) throw err;
-            console.log(results);
+        return new Promise((resolve, reject) => {
+            DBfunc.userExists(User, conn).then(res => {
+                if (res) reject(new Error("User already exists!"))
+                let query = 'INSERT INTO Users (Username, Password) VALUES (?,?)';
+                let values = [User.username, User.password];
+                conn.query(query, values, (err, results) => {
+                    if (err) reject(err);
+                    resolve(true);
+                });
+            });
         });
     }
 }
