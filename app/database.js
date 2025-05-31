@@ -192,7 +192,8 @@ let DBfunc = {
                 });
             });
         });
-    }, getProductsFromCategory: (category) => {
+    },
+    getProductsFromCategory: (category) => {
         return new Promise((resolve, reject) => {
             pool.getConnection((err, conn) => {
                 if (err) {
@@ -209,6 +210,60 @@ let DBfunc = {
                     resolve(results);
                 });
             });
+        });
+    },
+    userHasAppliances: (User, conn) => {
+        return new Promise((resolve, reject) => {
+            pool.getConnection((err, conn) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                let query = `SELECT Userid FROM HouseAppliances hp JOIN Users u ON hp.Userid = u.Userid WHERE u.Username = ?`;
+                conn.query(query, [User.username], (err, results) => {
+                    conn.release();
+
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(true);
+                });
+            });
+        });
+    },
+    saveUserAppliances: (User, data) => {
+        return new Promise((resolve, reject) => {
+            pool.getConnection((err, conn) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                DBfunc.userHasAppliances(User, conn).then(res => {
+                    if (res) {
+                        conn.query(`DELETE ha 
+                        FROM HouseAppliances ha
+                        JOIN Users u ON ha.Userid = u.Userid
+                        WHERE u.Username = ?;`, [User])
+                    }
+
+                    let query = `INSERT INTO HouseAppliances (Userid, Typeid, PowerUsage, Time)
+                                SELECT u.Userid, pt.Typeid, ?, ?
+                                FROM Users u
+                                JOIN ProductTypes pt ON pt.Name = ?
+                                WHERE u.Username = ?`;
+                    let values = [data.usagePerMonth, data.time, data.category, User];
+
+                    conn.query(query, values, (err, results) => {
+                        conn.release();
+
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        resolve(true);
+                    });
+                });
+            })
         });
     }
 }

@@ -113,19 +113,11 @@ app.post("/recomended", async (req, res) => {
 
         let reqList = []
         for (let i = 0; i < list.length; i++) {
-
-        
-        // list.forEach(async el => {
             let p = await dbcontroller.getProductsFromCategory(list[i].typeName)
-            // console.log(p)
-
             const mostEfficient = p.reduce((min, curr) =>
                 curr.PowerUsage < min.PowerUsage ? curr : min
             );
-            // console.log(mostEfficient);
-            
             reqList.push(mostEfficient)
-            // console.log(reqList)
         };
     
         console.log(reqList)
