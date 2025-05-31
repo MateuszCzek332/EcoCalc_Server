@@ -12,19 +12,23 @@ app.use(express.json());
 
 let simpleCalc = []
 
+app.get("/", (req, res) => {
+    res.send = "Hello world!"
+})
+
 app.post("/register",  (req, res) => {
     const {username, password} = req.body
     if( !username || !password )
         return res.sendStatus(400)
         
-    if(users.find( (user) => username == user.username ))
-        return res.sendStatus(409)
+    // if(users.find( (user) => username == user.username ))
+    //     return res.sendStatus(409)
 
     bcrypt.hash(password, 8,  async (err, hash) => {
         if (err)
             return res.sendStatus(400)
             
-        let isAdded =  await dbcontroller.uddUser({
+        let isAdded =  await dbcontroller.addUser({
             username: username,
             password: hash
         })
@@ -67,18 +71,20 @@ app.post("/logout", async (req, res) => {
     tokenController.deleteJWT(req, res)
 })
 
-app.post("/simpleCalc", () => {
+app.post("/simpleCalc", (req, res) => {
     tokenController.verifyJWT(req, res)
     if(!req.username) return res.end()
 
     if(!req.body.usagePerMonth || !req.body.pricePerKWH || !req.body.fotoSize)
         res.sendStatus(400)
 
-    dbcontroller.saveSimpleCalc(req.username, {
-        usagePerMonth: req.usagePerMonth,
-        pricePerKWH:req.pricePerKWH,
-        fotoSize:req.fotoSize
+    let a = dbcontroller.saveSimpleCalc(req.username, {
+        usagePerMonth: req.body.usagePerMonth,
+        pricePerKWH:req.body.pricePerKWH,
+        fotoSize:req.body.fotoSize
     })
+    if(!a) return res.sendStatus(400);
+    return res.sendStatus(200);
 })
 
 app.get("/simpleCalc", async () => {
