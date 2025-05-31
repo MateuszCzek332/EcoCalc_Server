@@ -24,7 +24,7 @@ conn.connect((err) => {
         DBfunc.isUserValid(new User("Testuser", "1234"), conn),
         DBfunc.isUserValid(new User("Testuser", "12345"), conn),
         DBfunc.isUserValid(new User("Testuser2", "4321"), conn),
-        DBfunc.uddUser(new User("sgvvvvfdjjfdgdggfg", "735gfgffg58"), conn)
+        //DBfunc.uddUser(new User("sgvvvvfdjjfdgdggfg", "735gfgffg58"), conn)
     ];
 
     Promise.all(queries)
@@ -43,7 +43,7 @@ let DBfunc = {
             let values = [User.username, User.password]
             conn.query(query, values, (err, results) => {
                 if (err) reject(err);
-                resolve(results.length > 0)
+                resolve(User.password)
             });
         });
     },
