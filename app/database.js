@@ -21,10 +21,10 @@ conn.connect((err) => {
     console.log("Succesfully connected to the database!");
 
     const queries = [
-        DBfunc.userExists(new User("Testuser", "1234"), conn),
-        DBfunc.userExists(new User("Testuser", "12345"), conn),
-        DBfunc.userExists(new User("Testuser2", "4321"), conn),
-        DBfunc.uddUser(new User("sgvvvvfddgdggfg", "735gfgffg58"), conn)
+        DBfunc.isUserValid(new User("Testuser", "1234"), conn),
+        DBfunc.isUserValid(new User("Testuser", "12345"), conn),
+        DBfunc.isUserValid(new User("Testuser2", "4321"), conn),
+        DBfunc.uddUser(new User("sgvvvvfdjjfdgdggfg", "735gfgffg58"), conn)
     ];
 
     Promise.all(queries)
@@ -36,7 +36,7 @@ conn.connect((err) => {
 });
 
 let DBfunc = {
-    userExists: (User, conn) => {
+    isUserValid: (User) => {
         return new Promise((resolve, reject) => {
             if (!User.username || !User.password) reject(new Error("Username or password is empty!"));
             let query = 'SELECT * FROM Users WHERE Username LIKE ? AND Password LIKE ?';
@@ -47,9 +47,9 @@ let DBfunc = {
             });
         });
     },
-    uddUser: (User, conn) => {
+    uddUser: (User) => {
         return new Promise((resolve, reject) => {
-            DBfunc.userExists(User, conn).then(res => {
+            DBfunc.isUserValid(User, conn).then(res => {
                 if (res) reject(new Error("User already exists!"))
                 let query = 'INSERT INTO Users (Username, Password) VALUES (?,?)';
                 let values = [User.username, User.password];
@@ -59,6 +59,9 @@ let DBfunc = {
                 });
             });
         });
+    },
+    usernameExists: (User, conn) => {
+
     }
 }
 
