@@ -136,7 +136,7 @@ app.post("/advancedCalc", async (req, res) => {
 
     const {list} = req.body
     if(!list) return res.sendStatus(400)
-
+    await dbcontroller.deleteUserAppliances(req.username);
     for (let i = 0; i < list.length; i++) {
         let ans = await dbcontroller.saveUserAppliances(req.username, {
             usage: list[i].usage, 
