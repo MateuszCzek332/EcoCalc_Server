@@ -47,8 +47,9 @@ app.post("/login", async (req, res) => {
         return res.sendStatus(400)
 
     let obj =  await  dbcontroller.isUserValid({username: username})
-    console.log(obj.Password, password);
     
+    if(!obj) return res.sendStatus(409);
+
     const compare = await bcrypt.compare(password, obj.Password);
     if(!compare)
         return res.sendStatus(401)
@@ -69,6 +70,7 @@ app.get("/refresh", async (req, res) => {
 
 app.post("/logout", async (req, res) => {
     tokenController.deleteJWT(req, res)
+    return res.sendStatus(200);
 })
 
 app.post("/simpleCalc", (req, res) => {
@@ -120,14 +122,7 @@ app.post("/recomended", async (req, res) => {
             reqList.push(mostEfficient)
         };
     
-        console.log(reqList)
         res.json(reqList)
-        
-        // {
-        //     typeName:
-        //     usage:
-        //     time:
-        // }
 })
 
 app.post("/advancedCalc", async (req, res) => {
@@ -143,7 +138,6 @@ app.post("/advancedCalc", async (req, res) => {
             time: list[i].time, 
             category: list[i].typeName
         })
-        console.log(req.username, list[i]);
         
         if(!ans) return res.sendStatus(400)
     };

@@ -39,7 +39,7 @@ let DBfunc = {
                         return reject(err);
                     }
                     if (results.length === 0) {
-                        return reject(new Error("User not found"));
+                        return resolve(false);
                     }
 
                     resolve(results[0]);
@@ -62,7 +62,7 @@ let DBfunc = {
                     .then(res => {
                         if (res) {
                             conn.release();
-                            return false;
+                            return resolve(false);
                         }
 
                         let query = 'INSERT INTO Users (Username, Password) VALUES (?,?)';
