@@ -150,6 +150,16 @@ app.post("/advancedCalc", async (req, res) => {
     return res.sendStatus(200);
 })
 
+app.get("/advancedCalc", async (req, res) => {
+    tokenController.verifyJWT(req, res)
+    if(!req.username) return res.end()
+
+    let ans = await dbcontroller.getUserAppliances(req.username)
+    if(!ans) return res.sendStatus(400)
+
+    return res.json(ans)
+})
+
 
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);

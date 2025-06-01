@@ -67,6 +67,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh1Y
 }
 
 ###
+GET http://localhost:3000/advancedCalc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh1YmVydCIsImlhdCI6MTc0ODczNzU1NywiZXhwIjoxNzQ4NzM5MzU3fQ.8ovcX31ymO7xImgey4wi-QGSj58kiiZoS2YzoL8yt3k
+
+###
 POST http://localhost:3000/recomended 
 Content-Type: application/json
 
