@@ -278,7 +278,8 @@ let DBfunc = {
                     if (err) {
                         return reject(err);
                     }
-                    resolve(true);
+                    console.log(results)
+                    resolve(results);
                 });
             });
         });
