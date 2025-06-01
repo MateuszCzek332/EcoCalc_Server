@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 
 app.post("/register",  (req, res) => {
     const {username, password} = req.body
-    if( !username || !password )
+    if( !username || !password  || username.length>32)
         return res.sendStatus(400)
         
     // if(users.find( (user) => username == user.username ))
