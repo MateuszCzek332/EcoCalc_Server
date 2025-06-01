@@ -141,12 +141,13 @@ app.post("/advancedCalc", async (req, res) => {
         let ans = await dbcontroller.saveUserAppliances(req.username, {
             usage: list[i].usage, 
             time: list[i].time, 
-            category: list[i].category
+            category: list[i].typeName
         })
-
+        console.log(req.username, list[i]);
+        
         if(!ans) return res.sendStatus(400)
     };
-
+    return res.sendStatus(200);
 })
 
 

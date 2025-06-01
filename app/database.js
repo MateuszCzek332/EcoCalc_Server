@@ -212,15 +212,17 @@ let DBfunc = {
             });
         });
     },
-    userHasAppliances: (User) => {
+    deleteUserAppliances: (User) => {
         return new Promise((resolve, reject) => {
             pool.getConnection((err, conn) => {
                 if (err) {
                     return reject(err);
                 }
 
-                let query = `SELECT Userid FROM HouseAppliances hp JOIN Users u ON hp.Userid = u.Userid WHERE u.Username = ?`;
-                conn.query(query, [User], (err, results) => {
+                conn.query(`DELETE ha 
+                        FROM HouseAppliances ha
+                        JOIN Users u ON ha.\`Userid\` = u.\`Userid\`
+                        WHERE u.Username = ?;`, [User], (err, results) => {
                     conn.release();
 
                     if (err) {
@@ -238,36 +240,28 @@ let DBfunc = {
                     return reject(err);
                 }
 
-                DBfunc.userHasAppliances(User, conn).then(res => {
-                    if (res) {
-                        conn.query(`DELETE ha 
-                        FROM HouseAppliances ha
-                        JOIN Users u ON ha.Userid = u.Userid
-                        WHERE u.Username = ?;`, [User])
-                    }
-
-                    let query = `INSERT INTO HouseAppliances (Userid, Typeid, PowerUsage, Time)
-                                SELECT u.Userid, pt.Typeid, ?, ?
+                console.log(User, data)
+                let query = `INSERT INTO HouseAppliances (\`Userid\`, Typeid, PowerUsage, Time)
+                                SELECT u.\`Userid\`, pt.Typeid, ?, ?
                                 FROM Users u
                                 JOIN ProductTypes pt ON pt.Name = ?
                                 WHERE u.Username = ?`;
-                    let values = [data.usage, data.time, data.category, User];
+                let values = [data.usage, data.time, data.category, User];
 
-                    conn.query(query, values, (err, results) => {
-                        conn.release();
+                conn.query(query, values, (err, results) => {
+                    conn.release();
 
-                        if (err) {
-                            return reject(err);
-                        }
+                    if (err) {
+                        return reject(err);
+                    }
 
-                        resolve(true);
-                    });
+                    resolve(true);
                 });
-            })
-        });
+            });
+        })
     },
     getUserAppliances: (User) => {
-                return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             pool.getConnection((err, conn) => {
                 if (err) {
                     return reject(err);
